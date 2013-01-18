@@ -1,3 +1,102 @@
+Tue Jan 15 16:30:29 2013  KOSAKI Motohiro  <kosaki.motohiro@gmail.com>
+
+	* thread_pthread.c (gvl_init): Reset gvl.wait_yield explicitly when
+	  fork()ing. Patch by Apollon Oikonomopoulos. Thanks!
+	  [Bug #7693][ruby-core:51424]
+
+Tue Jan 15 16:25:35 2013  Narihiro Nakamura  <authornari@gmail.com>
+
+	* gc.c (rb_objspace_call_finalizer): finalize_deferred may free up
+	  a object which is reachable from a part after this function,
+	  e.g. ruby_vm_destruct(). [ruby-dev:46647] [Bug #7452]
+
+	* test/ruby/test_gc.rb (test_finalizing_main_thread): add a test
+	  for above.
+
+Tue Jan 15 16:23:30 2013  NARUSE, Yui  <naruse@ruby-lang.org>
+
+	* lib/net/protocol.rb (Net::InternetMessageIO#each_crlf_line):
+	  treat \r as newline as mame pointed. [ruby-dev:46425] [Bug #7278]
+
+Tue Jan 15 16:23:30 2013  NARUSE, Yui  <naruse@ruby-lang.org>
+
+	* lib/net/protocol.rb (Net::InternetMessageIO#each_crlf_line):
+	  don't use /n in universal regexp. [ruby-dev:46394] [Bug #7278]
+
+Tue Jan 15 16:13:47 2013  Kenta Murata  <mrkn@mrkn.jp>
+
+	* ext/bigdecimal/bigdecimal.c (BigDecimal_to_s): use CRuby style.
+
+Tue Jan 15 16:13:47 2013  Kenta Murata  <mrkn@mrkn.jp>
+
+	* ext/bigdecimal/bigdecimal.c: use `RB_TYPE_P(x, t)` instead of
+	  `TYPE(x) == t`.
+
+Tue Jan 15 16:13:47 2013  Kenta Murata  <mrkn@mrkn.jp>
+
+	* ext/bigdecimal/bigdecimal.c (BigDecimal_sub):
+	  need to specify precision for converting Rational and Float.
+	  [ruby-dev:46544] [Bug #7404]
+
+	* ext/bigdecimal/bigdecimal.c (BigDecimal_mult): ditto.
+
+	* ext/bigdecimal/bigdecimal.c (BigDecimal_divide): ditto.
+
+	* ext/bigdecimal/bigdecimal.c (BigDecimal_DoDivmod): ditto.
+
+	* ext/bigdecimal/bigdecimal.c (BigDecimal_divremain): ditto.
+
+	* test/bigdecimal/test_bigdecimal.rb: add tests for the above fixes.
+
+Tue Jan 15 16:03:30 2013  Nobuyoshi Nakada  <nobu@ruby-lang.org>
+
+	* tool/mkconfig.rb: use configured libdir value to fix
+	  --enable-load-relative on systems where libdir is not default value,
+	  overridden in config.site files.  [ruby-core:47267] [Bug #6903]
+
+Tue Jan 15 15:55:09 2013  Eric Hodel  <drbrain@segment7.net>
+
+	* object.c (Init_Object):  Added RDoc location pointers for
+	  Kernel#methods, Kernel#protected_methods, Kernel#private_methods and
+	  Kernel#public_methods.  [Bug #6666]
+
+Fri Jan 11 17:12:44 2013  Nobuyoshi Nakada  <nobu@ruby-lang.org>
+
+	* vm_core.h (rb_iseq_t): move flip_cnt from struct iseq_compile_data,
+	  because it has same life span as enclosing iseq.  [Bug #7671]
+	  [ruby-core:51296]
+
+Fri Jan 11 17:11:26 2013  NARUSE, Yui  <naruse@ruby-lang.org>
+
+	* lib/mkmf.rb: add dummy clean-static target to prevent errors for the
+	  case real clean-static target doesn't exist.
+
+Fri Jan 11 17:02:59 2013  Koichi Sasada  <ko1@atdot.net>
+
+	* vm_exec.h (GENTRY): GENTRY should be pointer size.
+	  A patch by yoshidam (Yoshida Masato) [Bug #7332].
+
+Fri Jan 11 16:57:31 2013  NAKAMURA Usaku  <usa@ruby-lang.org>
+
+	* vm_trace.c (rb_threadptr_exec_event_hooks): added a parameter to pop
+	  a frame before JUMP_TAG() if exception occurred. This change fix bug
+	  of Ruby 1.9. [ruby-core:51128] [ruby-trunk - Bug #7624]
+
+	* vm_core.h (EXEC_EVENT_HOOK_AND_POP_FRAME): add to use
+	  `rb_threadptr_exec_event_hooks()' with the pop flag.
+
+	* vm.c (vm_exec): use EXEC_EVENT_HOOK_AND_POP_FRAME() while exception
+	  handling. While exception hadnling, if an exception is raised in
+	  hooks, need to pop current frame and raise this raised exception by
+	  hook.
+
+	* bootstraptest/test_flow.rb: add a test.
+
+Mon Jan  7 15:50:25 2013  Nobuyoshi Nakada  <nobu@ruby-lang.org>
+
+	* vm.c (rb_vm_make_proc): save the proc made from the given block so
+	  that it will not get collected.  [ruby-core:50545] [Bug #7507]
+
 Tue Dec 25 23:35:09 2012  NARUSE, Yui  <naruse@ruby-lang.org>
 
 	* lib/mkmf.rb: fix for if config["libdir"] is nil.
